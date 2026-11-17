@@ -6,6 +6,7 @@ import streamlit as st
 import splits_data as D
 import splits_engine as E
 import splits_ui as U
+import splits_v2 as V
 
 st.set_page_config(page_title="Splits", page_icon="🏃", layout="centered", initial_sidebar_state="collapsed")
 
@@ -74,26 +75,22 @@ v = G.kit_vars
 st.markdown(f"<style>:root{{--g1:{v['g1']};--g2:{v['g2']};--base:{v['base']};--card:{v['card']};"
             f"--line:{v['line']};--acc:{v['acc']};--acc2:{v['acc2']}}}</style>", unsafe_allow_html=True)
 
-U.header(G)
+V.header(G, store)
 if demo:
     st.caption("Demo data. Connect Strava to see your own runs.")
     if CLIENT_ID and APP_URL:
         url = (f"https://www.strava.com/oauth/authorize?client_id={CLIENT_ID}&response_type=code"
                f"&redirect_uri={APP_URL}&approval_prompt=force&scope=activity:read_all")
         st.link_button("Connect Strava", url, width="stretch")
-tabs = st.tabs(["Run", "Season", "Goals", "Graphs", "Profile", "Trophies"])
+tabs = st.tabs(["Run", "League", "Objectives", "Goals"])
 with tabs[0]:
-    U.page_run(G, store)
+    V.page_run(G, store)
 with tabs[1]:
-    U.page_season(G, store)
+    V.page_league(G)
 with tabs[2]:
-    U.page_goals(G, store)
+    V.page_objectives(G, store)
 with tabs[3]:
-    U.page_graphs(G)
-with tabs[4]:
-    U.page_profile(G, store)
-with tabs[5]:
-    U.page_trophies(G)
+    V.page_goals2(G, store)
 
 # celebrate a fresh PB once per visit
 fresh = G.alltime[G.alltime["date"] >= G.today - pd.Timedelta(days=2)]

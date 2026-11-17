@@ -674,9 +674,9 @@ def _trials(G):
 
 
 # ============================================================== GOALS
-def page_goals(G, store):
+def page_goals(G, store, show_rank=True):
     goal = G.goal
-    with st.expander("🎯 Set your goal", expanded=store.get("goal") is None):
+    with st.expander("🎯 Change goal", expanded=False):
         with st.form("goalform"):
             dists = list(GOAL_DISTS)
             dist = st.selectbox("Distance", dists, index=dists.index(goal["dist"]) if goal["dist"] in dists else 3)
@@ -732,7 +732,8 @@ def page_goals(G, store):
             y="t:Q", text="l:N", x=alt.value(0))
         chart(alt.layer(rule, txt, line), 230)
         st.caption(f"Predicted {goal['dist']} each week (up = faster), from your best runs in the 6 weeks before. Green: the goal.")
-    _rank_card(G)
+    if show_rank:
+        _rank_card(G)
 
 
 def _rank_card(G):
